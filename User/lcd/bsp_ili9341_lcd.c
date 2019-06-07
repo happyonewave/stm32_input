@@ -1323,7 +1323,7 @@ void ILI9341_DisplayStringEx(uint16_t x,        //字符显示位置x
 //	x *=Font_width;
 //	y *=Font_Height;
     // count++;
-    while (*ptr != '\0') {
+   // while (*ptr != '\0') {
         //printf("ILI9341_DisplayStringEx1:0x%x\n", *ptr);
         /****处理换行*****/
         if ((x - ILI9341_DispWindow_X_Star + Charwidth) > LCD_X_LENGTH) {
@@ -1364,7 +1364,7 @@ void ILI9341_DisplayStringEx(uint16_t x,        //字符显示位置x
             ptr++;
         }
         //printf("ILI9341_DisplayStringEx2:0x%x\n", *ptr);
-    }
+    //}
 }
 
 

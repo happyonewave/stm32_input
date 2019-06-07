@@ -257,8 +257,8 @@ int Key_Scan2(void) {
     }
     printf("buffer1 0x%x\n", *pBuffer);
     //编码上屏
-    if ((key >= 0x41) || key == 0x20) {
-        if (!shift && key != 0x20) {
+    if ((key >= 0x41)) {
+        if (!shift) {
             out += 0x20;
         }
         if ((pBuffer - (uint8_t *) pBuffer_start) < 8) {
@@ -269,6 +269,24 @@ int Key_Scan2(void) {
             pBuffer++;
             bufferCount++;
         }
+    }
+    //上屏空格
+    if (key == 0x20) {
+			printf("pBuffer_start 0x%x\n", *pBuffer_start);
+			if (!cursorType) {
+			if ((pBuffer - (uint8_t *) pBuffer_start) < 8) {
+					*pBuffer = out;
+					ILI9341_DisplayStringEx((bufferCount % (LCD_X_LENGTH / WIDTH_CH_CHAR)) * WIDTH_CH_CHAR, 0, WIDTH_CH_CHAR,
+																	WIDTH_CH_CHAR, (char *) &key, 0);
+					pBuffer++;
+					bufferCount++;
+			}
+			}else{
+			ILI9341_DisplayEx((contentCount % (LCD_X_LENGTH / WIDTH_CH_CHAR)) * WIDTH_CH_CHAR,
+												((contentCount) / (LCD_X_LENGTH / WIDTH_CH_CHAR) + 1) * WIDTH_CH_CHAR, WIDTH_CH_CHAR,
+												WIDTH_CH_CHAR,(uint16_t *)&key, 0);
+			contentCount++;
+			}
     }
     //向上移动光标
     if (key == 0x26) {

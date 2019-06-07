@@ -63,7 +63,7 @@ int main(void) {
     //EXTIX_Init();
 
     //指定显示模式
-    ILI9341_GramScan(3);
+    ILI9341_GramScan(0);
 
     //Printf_Charater();
 

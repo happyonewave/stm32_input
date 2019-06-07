@@ -3,9 +3,9 @@
 <title>Static Call Graph - [..\..\Output\Template.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\..\Output\Template.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Jun 07 19:58:39 2019
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Jun 07 20:49:17 2019
 <BR><P>
-<H3>Maximum Stack Usage =       1096 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =       1104 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 main &rArr; keyHandler &rArr; ILI9341_DisplayEx &rArr; GetUTF8Code_from_sd &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; SD_WriteMultiBlocks &rArr; __aeabi_uldivmod
 <P>
@@ -645,7 +645,7 @@ Global Symbols
 <P><STRONG><a name="[152]"></a>USART_ClearITPendingBit</STRONG> (Thumb, 52 bytes, Stack size 8 bytes, stm32f10x_usart.o(.text), UNUSED)
 
 <P><STRONG><a name="[46]"></a>main</STRONG> (Thumb, 240 bytes, Stack size 0 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 1096<LI>Call Chain = main &rArr; keyHandler &rArr; ILI9341_DisplayEx &rArr; GetUTF8Code_from_sd &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; SD_WriteMultiBlocks &rArr; __aeabi_uldivmod
+<BR><BR>[Stack]<UL><LI>Max Depth = 1104<LI>Call Chain = main &rArr; keyHandler &rArr; ILI9341_DisplayEx &rArr; GetUTF8Code_from_sd &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; SD_WriteMultiBlocks &rArr; __aeabi_uldivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;showCursor
 <LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;keyHandler
@@ -908,7 +908,7 @@ Global Symbols
 <LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ILI9341_DisplayStringEx
 </UL>
 
-<P><STRONG><a name="[71]"></a>ILI9341_DisplayStringEx</STRONG> (Thumb, 236 bytes, Stack size 88 bytes, bsp_ili9341_lcd.o(.text))
+<P><STRONG><a name="[71]"></a>ILI9341_DisplayStringEx</STRONG> (Thumb, 228 bytes, Stack size 88 bytes, bsp_ili9341_lcd.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 1048<LI>Call Chain = ILI9341_DisplayStringEx &rArr; GetUTF8Code_from_sd &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; SD_WriteMultiBlocks &rArr; __aeabi_uldivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetUTF8Code_from_sd
@@ -1226,8 +1226,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[63]"></a>keyHandler</STRONG> (Thumb, 736 bytes, Stack size 48 bytes, bsp_key.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 1096<LI>Call Chain = keyHandler &rArr; ILI9341_DisplayEx &rArr; GetUTF8Code_from_sd &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; SD_WriteMultiBlocks &rArr; __aeabi_uldivmod
+<P><STRONG><a name="[63]"></a>keyHandler</STRONG> (Thumb, 946 bytes, Stack size 56 bytes, bsp_key.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 1104<LI>Call Chain = keyHandler &rArr; ILI9341_DisplayEx &rArr; GetUTF8Code_from_sd &rArr; f_open &rArr; dir_register &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; sync_window &rArr; disk_write &rArr; SD_WriteMultiBlocks &rArr; __aeabi_uldivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;toBigEndian
 <LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GetHangulCode_from_sd

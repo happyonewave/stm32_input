@@ -37,56 +37,10 @@ compiling main.c...
 ..\..\User\main.c(101): warning:  #177-D: function "LCD_Test"  was declared but never referenced
   void LCD_Test(void) {
 ..\..\User\main.c: 4 warnings, 0 errors
-compiling stm32f10x_it.c...
-..\..\User\code\code.h(10852): warning:  #1-D: last line of file ends without a newline
-  #endif //INPUT_CODE_H
-..\..\User\stm32f10x_it.c: 2 warnings, 0 errors
-#177-D: function "Delay"  was declared but never referenced
-  static void Delay ( __IO uint32_t nCount )
-compiling bsp_ili9341_lcd.c...
-..\..\User\code\code.h(10852): warning:  #1-D: last line of file ends without a newline
-  #endif //INPUT_CODE_H
-..\..\User\lcd\bsp_ili9341_lcd.c(1001): warning:  #177-D: variable "usCh"  was declared but never referenced
-      uint16_t usCh;
-..\..\User\lcd\bsp_ili9341_lcd.c(1003): warning:  #177-D: variable "i"  was declared but never referenced
-      int i = 0;
-..\..\User\lcd\bsp_ili9341_lcd.c: 3 warnings, 0 errors
-compiling fonts.c...
-..\..\User\code\code.h(10852): warning:  #1-D: last line of file ends without a newline
-  #endif //INPUT_CODE_H
-..\..\User\font\fonts.c(1128): warning:  #177-D: variable "High8bit"  was declared but never referenced
-      unsigned char High8bit, Low8bit;
-..\..\User\font\fonts.c(1128): warning:  #177-D: variable "Low8bit"  was declared but never referenced
-      unsigned char High8bit, Low8bit;
-..\..\User\font\fonts.c: 3 warnings, 0 errors
-compiling bsp_key.c...
-..\..\User\code\code.h(10852): warning:  #1-D: last line of file ends without a newline
-  #endif //INPUT_CODE_H
-..\..\User\Key\bsp_key.h(26): warning:  #1295-D: Deprecated declaration showCursor - give arg types
-  void showCursor();
-..\..\User\Key\bsp_key.c(49): warning:  #177-D: variable "WriteVal"  was declared but never referenced
-      u16 WriteVal = 0;//???PA??????????????????
-..\..\User\Key\bsp_key.c(137): warning:  #177-D: variable "WriteVal"  was declared but never referenced
-      u16 WriteVal = 0;//???PA??????????????????
-..\..\User\Key\bsp_key.c(235): warning:  #181-D: argument is incompatible with corresponding format string conversion
-              printf("pBuffer 0=%#llX\n\n", pBuffer);
-..\..\User\Key\bsp_key.c(236): warning:  #181-D: argument is incompatible with corresponding format string conversion
-              printf("pBuffer_start 0=%#llX\n\n", pBuffer_start);
-..\..\User\Key\bsp_key.c(266): warning:  #181-D: argument is incompatible with corresponding format string conversion
-              printf("pBuffer_start 0x%x\n", *pBuffer_start);
-..\..\User\Key\bsp_key.c(310): warning:  #1-D: last line of file ends without a newline
-  }
-..\..\User\Key\bsp_key.c: 8 warnings, 0 errors
-compiling code.c...
-..\..\User\code\code.h(10852): warning:  #1-D: last line of file ends without a newline
-  #endif //INPUT_CODE_H
-..\..\User\code\code.c(145): warning:  #1-D: last line of file ends without a newline
-  }
-..\..\User\code\code.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=30468 RO-data=191916 RW-data=200 ZI-data=36104  
+Program Size: Code=30664 RO-data=191916 RW-data=200 ZI-data=36104  
 FromELF: creating hex file...
-"..\..\Output\Template.axf" - 0 Error(s), 21 Warning(s).
+"..\..\Output\Template.axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -100,7 +54,7 @@ Package Vendor: Keil
   C:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.0.0\Device\Include
 
 <h2>Collection of Component Files used:</h2>
-Build Time Elapsed:  00:00:08
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>

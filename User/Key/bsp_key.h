@@ -13,7 +13,8 @@ static int shift = 0;
 static uint8_t bufferCount = 0;
 /*content计数*/
 static uint8_t contentCount = 0;
-
+/*光标类型*/
+static uint8_t cursorType = 0;
 void KEY_Init(void);
 
 int Key_Scan(void);
@@ -22,4 +23,5 @@ int Key_Scan2(void);
 
 void keyHandler(uint8_t key, uint8_t *pBuffer, uint64_t *pBuffer_start);
 
+void showCursor();
 //#endif //INPUT_BSP_KEY_H

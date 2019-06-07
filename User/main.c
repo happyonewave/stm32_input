@@ -31,9 +31,9 @@ static void Delay(__IO uint32_t nCount);
 uint8_t *pBuffer;
 uint64_t *pBuffer_start;
 //char dispBuff[100];
+
 int key;
 int key2;
-
 int main(void) {
     //为buffer分配内存空间
     pBuffer = (uint8_t *) malloc(8);
@@ -72,18 +72,21 @@ int main(void) {
 
     ILI9341_Clear(0, 0, LCD_X_LENGTH, LCD_Y_LENGTH);    /* 清屏，显示全黑 */
 
+    //ILI9341_DispStringLine_EN_CH(LINE(7),0,"||");
+    //scanf("%d",&time);
     while (1) {
         key = Key_Scan();
         if (key != -1) {
-             keyHandler(key, pBuffer, pBuffer_start);
+            keyHandler(key, pBuffer, pBuffer_start);
     while (Key_Scan() == key) {}
         }
         key2 = Key_Scan2();
         if (key2 != -1) {
-             keyHandler(key2, pBuffer, pBuffer_start);
+            keyHandler(key2, pBuffer, pBuffer_start);
     while (Key_Scan2() == key2) {}
         }
-
+        Delay(1000000);
+        showCursor();
         //while ( 1 )
         //{
         //LCD_Test();

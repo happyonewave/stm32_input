@@ -234,9 +234,9 @@ void keyHandler(uint8_t key,uint8_t *pBuffer,uint64_t *pBuffer_start) {
     //上屏
     if (key == 0x0D) {
         printf("\n\n print pBuffer_start =%#llX\n\n", *pBuffer_start);
-        ILI9341_DisplayStringEx(bufferCount % (LCD_Y_LENGTH / WIDTH_CH_CHAR),(bufferCount) / (LCD_Y_LENGTH / WIDTH_CH_CHAR) + 2, WIDTH_CH_CHAR, WIDTH_CH_CHAR,  getValueByKey((uint32_t) * toBigEndian(*pBuffer_start), CODES,
+        ILI9341_DisplayStringEx(contentCount % (LCD_Y_LENGTH / WIDTH_CH_CHAR),(contentCount) / (LCD_Y_LENGTH / WIDTH_CH_CHAR) + 1, WIDTH_CH_CHAR, WIDTH_CH_CHAR,  getValueByKey((uint32_t) * toBigEndian(*pBuffer_start), CODES,
                                              "N"), 0);
-        bufferCount++;
+        contentCount++;
     }
     printf("buffer1 0x%x\n", *pBuffer);
     //编码上屏

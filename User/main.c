@@ -28,8 +28,8 @@ static void LCD_Test(void);
 
 static void Delay(__IO uint32_t nCount);
 
-uint8_t *pBuffer;
-uint64_t *pBuffer_start;
+static uint8_t *pBuffer;
+static uint64_t *pBuffer_start;
 //char dispBuff[100];
 
 int key;
@@ -77,12 +77,12 @@ int main(void) {
     while (1) {
         key = Key_Scan();
         if (key != -1) {
-            keyHandler(key, pBuffer, pBuffer_start);
+           pBuffer =  keyHandler(key, pBuffer, pBuffer_start);
     while (Key_Scan() == key) {}
         }
         key2 = Key_Scan2();
         if (key2 != -1) {
-            keyHandler(key2, pBuffer, pBuffer_start);
+           pBuffer =  keyHandler(key2, pBuffer, pBuffer_start);
     while (Key_Scan2() == key2) {}
         }
         Delay(1000000);

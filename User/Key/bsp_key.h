@@ -21,7 +21,7 @@ int Key_Scan(void);
 
 int Key_Scan2(void);
 
-void keyHandler(uint8_t key, uint8_t *pBuffer, uint64_t *pBuffer_start);
+uint8_t *keyHandler(uint8_t key, uint8_t *pBuffer, uint64_t *pBuffer_start);
 
 void showCursor();
 //#endif //INPUT_BSP_KEY_H

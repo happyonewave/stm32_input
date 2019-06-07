@@ -1124,14 +1124,14 @@ static UINT br;                                /* File R/W count */
 	* @param  c ： 要获取的文字
   * @retval None.
   */
-int GetUTF8Code_from_sd(uint8_t *pBuffer, uint32_t *c) {
+int GetUTF8Code_from_sd(uint8_t *pBuffer, uint16_t *c) {
     unsigned char High8bit, Low8bit;
     unsigned int pos;
 
     static uint8_t everRead = 0;
 
     printf("*c:0x%x\n", *c);
-    pos = utf_to_unicode((uint32_t)*toBigEndian(( uint64_t )*c)) * WIDTH_CH_CHAR * HEIGHT_CH_CHAR / 8;
+    pos =*c * WIDTH_CH_CHAR * HEIGHT_CH_CHAR / 8;
     /*第一次使用，挂载文件系统，初始化sd*/
     if (everRead == 0) {
         res_sd = f_mount(&fs, "0:", 1);
@@ -1153,7 +1153,6 @@ int GetUTF8Code_from_sd(uint8_t *pBuffer, uint32_t *c) {
     } else
         return -1;
 }
-
 #endif
 /*----------------------------end of file--------------------------*/
 

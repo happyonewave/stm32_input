@@ -915,7 +915,7 @@ void ILI9341_DispString_EN_YDir(uint16_t usX, uint16_t usY, char *pStr) {
  * @note 可使用LCD_SetBackColor、LCD_SetTextColor、LCD_SetColors函数设置颜色
  * @retval 无
  */
-void ILI9341_DispChar_CH(uint16_t usX, uint16_t usY, uint32_t *usChar) {
+void ILI9341_DispChar_CH(uint16_t usX, uint16_t usY, uint16_t *usChar) {
     uint8_t rowCount, bitCount;
     uint8_t ucBuffer[WIDTH_CH_CHAR * HEIGHT_CH_CHAR / 8];
     uint16_t usTemp;
@@ -958,7 +958,7 @@ void ILI9341_DispChar_CH(uint16_t usX, uint16_t usY, uint32_t *usChar) {
  * @note 可使用LCD_SetBackColor、LCD_SetTextColor、LCD_SetColors函数设置颜色
  * @retval 无
  */
-void ILI9341_DispString_CH(uint16_t usX, uint16_t usY, uint32_t *pStr) {
+void ILI9341_DispString_CH(uint16_t usX, uint16_t usY, uint16_t *pStr) {
     uint16_t usCh;
 
 
@@ -1045,7 +1045,7 @@ void ILI9341_DispStringLine_EN_CH(uint16_t line, uint16_t usX, char *pStr) {
 
             //usCh = ( usCh << 8 ) + ( usCh >> 8 );
 
-            ILI9341_DispChar_CH(usX, line, (uint32_t *) pStr);
+            ILI9341_DispChar_CH(usX, line, (uint16_t *) pStr);
             usX += WIDTH_CH_CHAR;
             pStr += 3;           //一个汉字两个字节
             printf("ILI9341_DispStringLine_EN_CH2:0x%x\n", *pStr);
@@ -1062,7 +1062,7 @@ void ILI9341_DispStringLine_EN_CH(uint16_t line, uint16_t usX, char *pStr) {
  * @note 可使用LCD_SetBackColor、LCD_SetTextColor、LCD_SetColors函数设置颜色
  * @retval 无
  */
-void ILI9341_DispString_EN_CH(uint16_t usX, uint16_t usY, uint32_t *pStr) {
+void ILI9341_DispString_EN_CH(uint16_t usX, uint16_t usY, uint16_t *pStr) {
     uint16_t usCh;
 
     while (*pStr != '\0') {
@@ -1147,7 +1147,7 @@ void ILI9341_DispString_EN_CH_YDir(uint16_t usX, uint16_t usY, char *pStr) {
 
             usCh = (usCh << 8) + (usCh >> 8);
 
-            ILI9341_DispChar_CH(usX, usY, (uint32_t *) pStr);
+            ILI9341_DispChar_CH(usX, usY, (uint16_t *) pStr);
 
             usY += HEIGHT_CH_CHAR;
 
@@ -1342,7 +1342,7 @@ void ILI9341_DisplayStringEx(uint16_t x,        //字符显示位置x
             Charwidth = Font_width;
             usCh = *(uint16_t *) ptr;
             usCh = (usCh << 8) + (usCh >> 8);
-            GetUTF8Code(ucBuffer, (uint32_t *) ptr);    //取字模数据
+            GetUTF8Code(ucBuffer, (uint16_t *) ptr);    //取字模数据
             //缩放字模数据，源字模为16*16
             ILI9341_zoomChar(WIDTH_CH_CHAR, HEIGHT_CH_CHAR, Charwidth, Font_Height, (uint8_t * ) & ucBuffer, psr, 1);
             //显示单个字符
@@ -1368,6 +1368,78 @@ void ILI9341_DisplayStringEx(uint16_t x,        //字符显示位置x
 }
 
 
+/**
+ * @brief  利用缩放后的字模显示字符串
+ * @param  Xpos ：字符显示位置x
+ * @param  Ypos ：字符显示位置y
+ * @param  Font_width ：字符宽度，英文字符在此基础上/2。注意为偶数
+ * @param  Font_Heig：字符高度，注意为偶数
+ * @param  c ：要显示的字符串
+ * @param  DrawModel ：是否反色显示
+ * @retval 无
+ */
+void ILI9341_DisplayEx(uint16_t x,        //字符显示位置x
+                             uint16_t y,                //字符显示位置y
+                             uint16_t Font_width,    //要显示的字体宽度，英文字符在此基础上/2。注意为偶数
+                             uint16_t Font_Height,    //要显示的字体高度，注意为偶数
+                             uint16_t *ptr,                    //显示的字符内容
+                             uint16_t DrawModel)  //是否反色显示
+
+
+
+{
+    //static uint8_t count = 0;
+    uint16_t Charwidth = Font_width; //默认为Font_width，英文宽度为中文宽度的一半
+    uint8_t *psr;
+    uint8_t Ascii;    //英文
+    uint16_t usCh;  //中文
+    uint8_t ucBuffer[WIDTH_CH_CHAR * HEIGHT_CH_CHAR / 8];
+//	x *=Font_width;
+//	y *=Font_Height;
+    // count++;
+//    while (*ptr != '\0') {
+        //printf("ILI9341_DisplayStringEx1:0x%x\n", *ptr);
+        /****处理换行*****/
+        if ((x - ILI9341_DispWindow_X_Star + Charwidth) > LCD_X_LENGTH) {
+            x = ILI9341_DispWindow_X_Star;
+            y += Font_Height;
+        }
+
+        if ((y - ILI9341_DispWindow_Y_Star + Font_Height) > LCD_Y_LENGTH) {
+            x = ILI9341_DispWindow_X_Star;
+            y = ILI9341_DispWindow_Y_Star;
+        }
+
+        //printf("ILI9341_DisplayStringEx：0x%x\n", *ptr);
+        if (*ptr > 0x80) //如果是中文
+        {
+            Charwidth = Font_width;
+            usCh = *(uint16_t *) ptr;
+            usCh = (usCh << 8) + (usCh >> 8);
+            GetUTF8Code(ucBuffer, ptr);    //取字模数据
+            //缩放字模数据，源字模为16*16
+            ILI9341_zoomChar(WIDTH_CH_CHAR, HEIGHT_CH_CHAR, Charwidth, Font_Height, (uint8_t * ) & ucBuffer, psr, 1);
+            //显示单个字符
+            ILI9341_DrawChar_Ex(x, y, Charwidth, Font_Height, (uint8_t * ) & zoomBuff, DrawModel);
+            x += Charwidth;
+            ptr += 3;
+        } else {
+
+            //printf("English:0x%x\n", *ptr);
+            //Charwidth = Font_width / 2;
+            Charwidth = Font_width;
+            Ascii = *ptr - 32;
+            //使用16*24字体缩放字模数据
+            ILI9341_zoomChar(16, 24, Charwidth, Font_Height,
+                             (uint8_t * ) & Font16x24.table[Ascii * Font16x24.Height * Font16x24.Width / 8], psr, 0);
+            //显示单个字符
+            ILI9341_DrawChar_Ex(x, y, Charwidth, Font_Height, (uint8_t * ) & zoomBuff, DrawModel);
+            x += Charwidth;
+            ptr++;
+        }
+        //printf("ILI9341_DisplayStringEx2:0x%x\n", *ptr);
+//    }
+}
 /**
  * @brief  利用缩放后的字模显示字符串(沿Y轴方向)
  * @param  Xpos ：字符显示位置x
@@ -1408,7 +1480,7 @@ void ILI9341_DisplayStringEx_YDir(uint16_t x,        //字符显示位置x
             Charwidth = Font_width;
             usCh = *(uint16_t *) ptr;
             usCh = (usCh << 8) + (usCh >> 8);
-            GetUTF8Code(ucBuffer, (uint32_t *) ptr);    //取字模数据
+            GetUTF8Code(ucBuffer, (uint16_t *) ptr);    //取字模数据
             //缩放字模数据，源字模为16*16
             ILI9341_zoomChar(WIDTH_CH_CHAR, HEIGHT_CH_CHAR, Charwidth, Font_Height, (uint8_t * ) & ucBuffer, psr, 1);
             //显示单个字符

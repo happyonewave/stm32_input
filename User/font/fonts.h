@@ -56,13 +56,13 @@ int GetGBKCode_from_EXFlash( uint8_t * pBuffer, uint16_t c);
 /*SD卡字模路径*/
 #define GBKCODE_FILE_NAME            "0:/srcdata/UNICODE_H1616.FON"
 
+/*韩文码表路径*/
+#define HANGULCODE_FILE_NAME            "0:/srcdata/HANGUL_CODE.BIN"
 
 /*获取字库的函数*/
 //定义获取中文字符字模数组的函数名，ucBuffer为存放字模数组名，usChar为中文字符（国标码）
-
 #define GetUTF8Code(ucBuffer, usChar)  GetUTF8Code_from_sd( ucBuffer, usChar )
-
-int GetUTF8Code_from_sd(uint8_t *pBuffer, uint32_t *c);
+int GetUTF8Code_from_sd(uint8_t *pBuffer, uint16_t *c);
 
 #endif
 

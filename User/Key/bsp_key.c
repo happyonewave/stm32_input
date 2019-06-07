@@ -4,6 +4,7 @@
 
 #include "bsp_key.h"
 #include "bsp_ili9341_lcd.h"
+
 /*********************************************************************
 *按键用的PA8-PA11,PB12-PB15
 *PA8-PA11为推挽输出
@@ -46,7 +47,8 @@ void KEY_Init(void)//按键初始化
 int Key_Scan(void) {
     int keyValue = 0;//按键值
     u16 WriteVal = 0;//给PA口写入的数据
-    __IO uint32_t nCount = 1000;
+    __IO
+    uint32_t nCount = 1000;
     GPIO_Write(GPIOB, ((GPIOB->ODR & 0x00ff) | 0x0f00));//让PA8-11输出高电平
 
     //printf("GPIOB->IDR:0x%x\n",GPIOB->IDR);
@@ -54,7 +56,7 @@ int Key_Scan(void) {
         return -1;
     else {
         //Delay(1000);//延时消抖
-        for (; nCount != 0; nCount--){};
+        for (; nCount != 0; nCount--) {};
         if ((GPIOB->IDR & 0xf000) == 0x0000)//若PB12-PB15全为0，则刚刚是抖动产生
             return -1;
 
@@ -133,7 +135,8 @@ int Key_Scan(void) {
 int Key_Scan2(void) {
     int keyValue = 67;//按键值
     u16 WriteVal = 0;//给PA口写入的数据
-    __IO uint32_t nCount = 1000;
+    __IO
+    uint32_t nCount = 1000;
     //printf("GPIOC->IDR1:0x%x\n",GPIOC->IDR);
     GPIO_Write(GPIOC, ((GPIOC->ODR & 0xf00f) | 0x00f0));//让PA4-7输出高电平
     //GPIO_WriteBit(GPIOC,GPIO_Pin_4 , 0);
@@ -142,7 +145,7 @@ int Key_Scan2(void) {
         return -1;
     else {
         //Delay(1000);//延时消抖
-        for (; nCount != 0; nCount--){};
+        for (; nCount != 0; nCount--) {};
         if ((GPIOC->IDR & 0x0f00) == 0x0000)//若PB8-PB12全为0，则刚刚是抖动产生
             return -1;
 
@@ -214,25 +217,29 @@ int Key_Scan2(void) {
     return keyValue;
 }
 
-void keyHandler(uint8_t key,uint8_t *pBuffer,uint64_t *pBuffer_start) {
+ uint8_t *keyHandler(uint8_t key, uint8_t *pBuffer, uint64_t *pBuffer_start) {
     int out = key;
+	  uint16_t hangul;
     printf("\n\npBuffer_start 0=%#llX\n\n", *pBuffer_start);
-    printf("key:0x%x\n", key);
+    //printf("key:0x%x\n", key);
     //退格
     if (key == 0x08) {
-        if (!cursorType){
-            if (bufferCount > 0){
+        if (!cursorType) {
+            if (bufferCount > 0) {
                 bufferCount--;
             }
-            ILI9341_Clear(bufferCount % (LCD_X_LENGTH / WIDTH_CH_CHAR), 0, WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
-            *pBuffer = 0x0;
             if ((pBuffer - (uint8_t *) pBuffer_start) > 0)
                 pBuffer--;
-        }else{
-            if (contentCount > 0){
+            ILI9341_Clear(bufferCount % (LCD_X_LENGTH / WIDTH_CH_CHAR), 0, WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
+            *pBuffer = 0x0;
+            printf("pBuffer 0=%#llX\n\n", pBuffer);
+            printf("pBuffer_start 0=%#llX\n\n", pBuffer_start);
+        } else {
+            if (contentCount > 0) {
                 contentCount--;
             }
-            ILI9341_Clear(contentCount % (LCD_X_LENGTH / WIDTH_CH_CHAR),  (contentCount / (LCD_X_LENGTH / WIDTH_CH_CHAR))+1, WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
+            ILI9341_Clear(contentCount % (LCD_X_LENGTH / WIDTH_CH_CHAR),
+                          (contentCount / (LCD_X_LENGTH / WIDTH_CH_CHAR)) + 1, WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
         }
     }
     //切换shift
@@ -242,8 +249,10 @@ void keyHandler(uint8_t key,uint8_t *pBuffer,uint64_t *pBuffer_start) {
     //上屏
     if (key == 0x0D) {
         printf("\n\n print pBuffer_start =%#llX\n\n", *pBuffer_start);
-        ILI9341_DisplayStringEx((contentCount % (LCD_X_LENGTH / WIDTH_CH_CHAR))*WIDTH_CH_CHAR,((contentCount) / (LCD_X_LENGTH / WIDTH_CH_CHAR) + 1)*WIDTH_CH_CHAR, WIDTH_CH_CHAR, WIDTH_CH_CHAR,  getValueByKey((uint32_t) * toBigEndian(*pBuffer_start), CODES,
-                                             "N"), 0);
+				hangul =  GetHangulCode_from_sd((uint32_t) * toBigEndian(*pBuffer_start), "N");
+        ILI9341_DisplayEx((contentCount % (LCD_X_LENGTH / WIDTH_CH_CHAR)) * WIDTH_CH_CHAR,
+                          ((contentCount) / (LCD_X_LENGTH / WIDTH_CH_CHAR) + 1) * WIDTH_CH_CHAR, WIDTH_CH_CHAR,
+                          WIDTH_CH_CHAR,&hangul, 0);
         contentCount++;
     }
     printf("buffer1 0x%x\n", *pBuffer);
@@ -254,43 +263,48 @@ void keyHandler(uint8_t key,uint8_t *pBuffer,uint64_t *pBuffer_start) {
         }
         if ((pBuffer - (uint8_t *) pBuffer_start) < 8) {
             *pBuffer = out;
-            printf("pBuffer_start 0x%x\n", *pBuffer);
-            ILI9341_DisplayStringEx((bufferCount % (LCD_X_LENGTH / WIDTH_CH_CHAR))*WIDTH_CH_CHAR, 0, WIDTH_CH_CHAR, WIDTH_CH_CHAR,(char *) &out, 0);
+            printf("pBuffer_start 0x%x\n", *pBuffer_start);
+            ILI9341_DisplayStringEx((bufferCount % (LCD_X_LENGTH / WIDTH_CH_CHAR)) * WIDTH_CH_CHAR, 0, WIDTH_CH_CHAR,
+                                    WIDTH_CH_CHAR, (char *) &out, 0);
             pBuffer++;
             bufferCount++;
         }
     }
     //向上移动光标
     if (key == 0x26) {
-        ILI9341_Clear((((contentCount) % (LCD_X_LENGTH / WIDTH_CH_CHAR))),  (contentCount / (LCD_X_LENGTH / WIDTH_CH_CHAR))+1, WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
+        ILI9341_Clear((((contentCount) % (LCD_X_LENGTH / WIDTH_CH_CHAR))),
+                      (contentCount / (LCD_X_LENGTH / WIDTH_CH_CHAR)) + 1, WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
         cursorType = 0;
     }
     //向下移动光标
     if (key == 0x28) {
-        ILI9341_Clear((((bufferCount) % (LCD_X_LENGTH / WIDTH_CH_CHAR))),  (bufferCount / (LCD_X_LENGTH / WIDTH_CH_CHAR)), WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
+        ILI9341_Clear((((bufferCount) % (LCD_X_LENGTH / WIDTH_CH_CHAR))),
+                      (bufferCount / (LCD_X_LENGTH / WIDTH_CH_CHAR)), WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
         cursorType = 1;
     }
+		return pBuffer;
 }
+
 void showCursor() {
     static uint8_t show = 0;
     static uint8_t count = 0;
     uint16_t x = 0;
     uint16_t y = 0;
-    count = cursorType==0? bufferCount:contentCount;
+    count = cursorType == 0 ? bufferCount : contentCount;
     x = ((count) % (LCD_X_LENGTH / WIDTH_CH_CHAR));
     y = count / (LCD_X_LENGTH / WIDTH_CH_CHAR);
-    y =cursorType==0? y:y+1;
-    printf("count:%d\n",count);
-    printf("show:%d\n",show);
-    if(cursorType&&(x==((LCD_X_LENGTH / WIDTH_CH_CHAR)-1))){
-        ILI9341_Clear(0, y+1, WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
+    y = cursorType == 0 ? y : y + 1;
+    //printf("count:%d\n", count);
+    //printf("show:%d\n", show);
+    if (cursorType && (x == ((LCD_X_LENGTH / WIDTH_CH_CHAR) - 1))) {
+        ILI9341_Clear(0, y + 1, WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
     }
-    if(!show){
-        ILI9341_DisplayStringEx(x * WIDTH_CH_CHAR,y * WIDTH_CH_CHAR,WIDTH_CH_CHAR, WIDTH_CH_CHAR,"|", 0);
-        show =1;
-    }else{
+    if (!show) {
+        ILI9341_DisplayStringEx(x * WIDTH_CH_CHAR, y * WIDTH_CH_CHAR, WIDTH_CH_CHAR, WIDTH_CH_CHAR, "|", 0);
+        show = 1;
+    } else {
         ILI9341_Clear(x, y, WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
-        ILI9341_Clear(x+1,y, WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
-        show =0;
+        ILI9341_Clear(x + 1, y, WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
+        show = 0;
     }
 }

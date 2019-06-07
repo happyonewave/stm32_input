@@ -53,7 +53,7 @@ int main(void) {
     printf("buffer 0x%x\n", *pBuffer);
 
     /* LED 端口初始化 */
-    //LED_GPIO_Config();
+    LED_GPIO_Config();
 
     /* 初始化EXTI中断，按下按键会触发中断，
   *  触发中断会进入stm32f4xx_it.c文件中的函数

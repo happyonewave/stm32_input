@@ -3,6 +3,7 @@
 //
 
 #include "bsp_key.h"
+#include "bsp_led.h"
 #include "bsp_ili9341_lcd.h"
 
 /*********************************************************************
@@ -250,10 +251,20 @@ int Key_Scan2(void) {
     if (key == 0x0D) {
         printf("\n\n print pBuffer_start =%#llX\n\n", *pBuffer_start);
 				hangul =  GetHangulCode_from_sd((uint32_t) * toBigEndian(*pBuffer_start), "N");
+			if(hangul!=0x4E){
+				LED1_OFF
         ILI9341_DisplayEx((contentCount % (LCD_X_LENGTH / WIDTH_CH_CHAR)) * WIDTH_CH_CHAR,
                           ((contentCount) / (LCD_X_LENGTH / WIDTH_CH_CHAR) + 1) * WIDTH_CH_CHAR, WIDTH_CH_CHAR,
                           WIDTH_CH_CHAR,&hangul, 0);
-        contentCount++;
+				bufferCount-=(pBuffer - (uint8_t *) pBuffer_start);
+				*pBuffer_start = 0x0;
+        printf("\n\n print pBuffer_start =%#llX\n\n", *pBuffer_start);
+        ILI9341_Clear((((bufferCount) % (LCD_X_LENGTH / WIDTH_CH_CHAR))),0, ((pBuffer - (uint8_t *) pBuffer_start)+2)*WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
+				pBuffer= (uint8_t *)pBuffer_start;       
+				contentCount++;
+			}else{
+				LED1_ON
+			}
     }
     printf("buffer1 0x%x\n", *pBuffer);
     //编码上屏

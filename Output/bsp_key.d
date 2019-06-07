@@ -31,5 +31,6 @@
 ..\..\output\bsp_key.o: ..\..\Libraries\FWlib\inc\misc.h
 ..\..\output\bsp_key.o: ..\..\User\code\code.h
 ..\..\output\bsp_key.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+..\..\output\bsp_key.o: ..\..\User\led\bsp_led.h
 ..\..\output\bsp_key.o: ..\..\User\lcd\bsp_ili9341_lcd.h
 ..\..\output\bsp_key.o: ..\..\User\font\fonts.h

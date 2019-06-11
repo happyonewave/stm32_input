@@ -8,6 +8,8 @@
 #include <stdint.h>
 #include "stm32f10x.h"
 #include "code.h"
+#define      column(x)                x % (LCD_X_LENGTH / WIDTH_CH_CHAR)
+#define      row(x)                x / (LCD_X_LENGTH / WIDTH_CH_CHAR)
 static int shift = 0;
 /*buffer计数*/
 static uint8_t bufferCount = 0;

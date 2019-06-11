@@ -231,7 +231,7 @@ int Key_Scan2(void) {
             }
             if ((pBuffer - (uint8_t *) pBuffer_start) > 0)
                 pBuffer--;
-            ILI9341_Clear(bufferCount % (LCD_X_LENGTH / WIDTH_CH_CHAR), 0, WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
+            ILI9341_Clear(column(bufferCount), 0, WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
             *pBuffer = 0x0;
             printf("pBuffer 0=%#llX\n\n", pBuffer);
             printf("pBuffer_start 0=%#llX\n\n", pBuffer_start);
@@ -239,8 +239,8 @@ int Key_Scan2(void) {
             if (contentCount > 0) {
                 contentCount--;
             }
-            ILI9341_Clear(contentCount % (LCD_X_LENGTH / WIDTH_CH_CHAR),
-                          (contentCount / (LCD_X_LENGTH / WIDTH_CH_CHAR)) + 1, WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
+            ILI9341_Clear(column(contentCount),
+                          row(contentCount) + 1, WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
         }
     }
     //切换shift
@@ -253,13 +253,13 @@ int Key_Scan2(void) {
 				hangul =  GetHangulCode_from_sd((uint32_t) * toBigEndian(*pBuffer_start), "N");
 			if(hangul!=0x4E){
 				LED1_OFF
-        ILI9341_DisplayEx((contentCount % (LCD_X_LENGTH / WIDTH_CH_CHAR)) * WIDTH_CH_CHAR,
-                          ((contentCount) / (LCD_X_LENGTH / WIDTH_CH_CHAR) + 1) * WIDTH_CH_CHAR, WIDTH_CH_CHAR,
+        ILI9341_DisplayEx(column(contentCount) * WIDTH_CH_CHAR,
+                          (row(contentCount) + 1) * WIDTH_CH_CHAR, WIDTH_CH_CHAR,
                           WIDTH_CH_CHAR,&hangul, 0);
 				bufferCount-=(pBuffer - (uint8_t *) pBuffer_start);
 				*pBuffer_start = 0x0;
         printf("\n\n print pBuffer_start =%#llX\n\n", *pBuffer_start);
-        ILI9341_Clear((((bufferCount) % (LCD_X_LENGTH / WIDTH_CH_CHAR))),0, ((pBuffer - (uint8_t *) pBuffer_start)+2)*WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
+        ILI9341_Clear(column(bufferCount),0, ((pBuffer - (uint8_t *) pBuffer_start)+2)*WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
 				pBuffer= (uint8_t *)pBuffer_start;       
 				contentCount++;
 			}else{
@@ -275,7 +275,7 @@ int Key_Scan2(void) {
         if ((pBuffer - (uint8_t *) pBuffer_start) < 8) {
             *pBuffer = out;
             printf("pBuffer_start 0x%x\n", *pBuffer_start);
-            ILI9341_DisplayStringEx((bufferCount % (LCD_X_LENGTH / WIDTH_CH_CHAR)) * WIDTH_CH_CHAR, 0, WIDTH_CH_CHAR,
+            ILI9341_DisplayStringEx((column(bufferCount)) * WIDTH_CH_CHAR, 0, WIDTH_CH_CHAR,
                                     WIDTH_CH_CHAR, (char *) &out, 0);
             pBuffer++;
             bufferCount++;
@@ -287,14 +287,14 @@ int Key_Scan2(void) {
 			if (!cursorType) {
 			if ((pBuffer - (uint8_t *) pBuffer_start) < 8) {
 					*pBuffer = out;
-					ILI9341_DisplayStringEx((bufferCount % (LCD_X_LENGTH / WIDTH_CH_CHAR)) * WIDTH_CH_CHAR, 0, WIDTH_CH_CHAR,
+					ILI9341_DisplayStringEx(column(bufferCount) * WIDTH_CH_CHAR, 0, WIDTH_CH_CHAR,
 																	WIDTH_CH_CHAR, (char *) &key, 0);
 					pBuffer++;
 					bufferCount++;
 			}
 			}else{
-			ILI9341_DisplayEx((contentCount % (LCD_X_LENGTH / WIDTH_CH_CHAR)) * WIDTH_CH_CHAR,
-												((contentCount) / (LCD_X_LENGTH / WIDTH_CH_CHAR) + 1) * WIDTH_CH_CHAR, WIDTH_CH_CHAR,
+			ILI9341_DisplayEx(column(contentCount) * WIDTH_CH_CHAR,
+												(row(contentCount) + 1) * WIDTH_CH_CHAR, WIDTH_CH_CHAR,
 												WIDTH_CH_CHAR,(uint16_t *)&key, 0);
 			contentCount++;
 			}
@@ -302,13 +302,13 @@ int Key_Scan2(void) {
     //向上移动光标
     if (key == 0x26) {
         ILI9341_Clear((((contentCount) % (LCD_X_LENGTH / WIDTH_CH_CHAR))),
-                      (contentCount / (LCD_X_LENGTH / WIDTH_CH_CHAR)) + 1, WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
+                      row(contentCount) + 1, WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
         cursorType = 0;
     }
     //向下移动光标
     if (key == 0x28) {
-        ILI9341_Clear((((bufferCount) % (LCD_X_LENGTH / WIDTH_CH_CHAR))),
-                      (bufferCount / (LCD_X_LENGTH / WIDTH_CH_CHAR)), WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
+        ILI9341_Clear(column(bufferCount),
+                      row(bufferCount), WIDTH_CH_CHAR, WIDTH_CH_CHAR);    /* 清屏*/
         cursorType = 1;
     }
 		return pBuffer;
@@ -320,8 +320,8 @@ void showCursor() {
     uint16_t x = 0;
     uint16_t y = 0;
     count = cursorType == 0 ? bufferCount : contentCount;
-    x = ((count) % (LCD_X_LENGTH / WIDTH_CH_CHAR));
-    y = count / (LCD_X_LENGTH / WIDTH_CH_CHAR);
+    x = column(count);
+    y = row(count);
     y = cursorType == 0 ? y : y + 1;
     //printf("count:%d\n", count);
     //printf("show:%d\n", show);
